@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/base_css.css' %}">
+<link rel="stylesheet" href="{% static 'css/readMainPage_css.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="image">
+        <img src="http://placehold.it/880x600" width="880" height="600">
+    </div>
+</div>
+
+<div class="container">
+    <div class="navigation">
+        <ul>
+            <li><a href="{% url 'Domestic_Cigarette_App:RCA' %}">국산담배</a></li>
+            <li><a href="{% url 'Foreign_Cigarette_App:RCA' %}">해외담배</a></li>
+            <li><a href="#">궐련형담배</a></li>
+            <li><a href="#">QnA</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

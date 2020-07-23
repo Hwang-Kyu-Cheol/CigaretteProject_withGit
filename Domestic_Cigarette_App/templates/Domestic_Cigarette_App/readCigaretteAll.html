@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/base_css.css' %}">
+<link rel="stylesheet" href="{% static 'css/readCigarette_css.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="navigation">
+        {% if cigarette_category %}
+        <ul>
+            <li><a href="{% url 'Domestic_Cigarette_App:RCA' %}" style="background:red;">ALL</a></li>
+            {% for item in cigarette_category %}
+            <li><a href="{% url 'Domestic_Cigarette_App:RCC' item.Category %}">{{item.Category}}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+    
+<div class="container">
+    {% if cigarette_list %}
+    <div class="cigarette-list">
+        {% for item in cigarette_list %}
+        <li>
+            <div class="image">
+                <a href="{% url 'Domestic_Cigarette_App:RCD' item.Name %}"><img src="http://placehold.it/150x200" width="150" height="200"></a>
+            </div>
+            <div class="cigainfo">
+                <p class="name"><a href="{% url 'Domestic_Cigarette_App:RCD' item.Name %}">{{item.Name}}</a></p>
+                <p class="price">{{item.Price}}Won</p>
+                <p class="good">SP : {{item.StarPoint}}</p>
+                <p>( {{item.Comments.count}} )</p>
+            </div>
+        </li>
+        {% endfor %}
+    </div>
+    {% else %}
+    <h3>This Post Does Not Exist.</h3>
+    {% endif %}
+</div>
+{% endblock %}

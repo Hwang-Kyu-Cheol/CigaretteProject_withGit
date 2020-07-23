@@ -1,0 +1,14 @@
+.navigation li {
+    text-decoration: none;
+    float: left;
+    margin-right: 150px;
+    color: black;
+}
+
+.cigarette-list li {
+    list-style: none;
+    text-decoration: none;
+    margin-left: 50px;
+    margin-right: 50px;
+    float: left;
+}

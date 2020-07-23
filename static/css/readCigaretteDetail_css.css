@@ -1,0 +1,47 @@
+.left-image {
+    float: left; width: 580px;
+}
+
+.left-image > img {
+    margin: 100px; 
+}
+
+.goodandbad {
+    width: 160px;
+    margin: 0 auto;
+}
+
+.information {
+    float: right; width: 500px;
+    margin: 100px 0 0 0;
+}
+
+.chatInfo {
+    overflow: hidden;
+}
+
+#commentNum {
+    float: left;
+}
+
+#createChat{
+    margin-top: 30px;
+    float: right;
+}
+
+#star_grade a{
+    text-decoration: none;
+    color: gray;
+} 
+
+#star_grade a.on{
+    color: red;
+}
+
+#newComment {
+    display: none;
+}
+
+.EditAndDelete {
+    display: none;
+}

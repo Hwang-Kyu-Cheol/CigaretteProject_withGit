@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block scripts %}
+<script>
+        // using jQuery
+        function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+            }
+        }
+        return cookieValue;
+        }
+        function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $(document).ready(function() {
+        var csrftoken = getCookie('csrftoken');
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+            }
+        });
+        
+        var frm = $('#logIn_form');
+        frm.submit(function(e){
+            var input_id = $('#username_input').val();
+            var input_password = $('#password_input').val();
+            
+            if(input_id == ''){
+                alert('아이디를 입력해주십시오.');
+                return false;
+            }
+            if(input_password == ''){
+                alert('비밀번호를 입력하여 주십시오.');
+                return false;
+            }
+            
+            e.preventDefault();
+        
+            $.ajax({
+                url : frm.attr('action'),
+                type : frm.attr('method'),
+                data : frm.serialize(),
+                dataType : 'json',
+                success : function(data) {
+                    if(data['response'] == "fail"){
+                        alert("Id or Password Not Exists");
+                        $('#username_input').focus();		             		             
+                    } else {
+                        alert("LogIn Success");
+                        window.location.href=data['redirect_url'];                        		                 		             		                		                 
+                    }		             
+                },
+                error : function(error){
+                    alert(error);
+                }
+            });
+          });
+        });        
+</script>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/base_css.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if user.is_authenticated %}
+    <h1>이미 로그인이 되어있습니다.</h1>
+    {% else %}
+    <form id="logIn_form" action="{% url 'Member_App:LI' %}?next={{redirect_url}}" method="POST">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>아이디(닉네임)</td>
+                <td><input id="username_input" type="text" name="username"></td>
+            </tr>
+            <tr>
+                <td>비밀번호</td>
+                <td><input id="password_input" type="password" name="password"></td>
+            </tr>
+        </table>
+        <input type="submit" value="로그인하기">
+    </form>                
+    {% endif %}
+</div>
+{% endblock %}

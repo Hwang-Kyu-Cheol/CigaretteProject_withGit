@@ -1,0 +1,33 @@
+.container {
+    width: 1080px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.top-container {
+    background-color: crimson;
+    left: 0; top: 0; right: 0;
+    height: 70px;
+}
+
+.top-container h1 {
+    float: left;
+    padding-left: 150px;
+    color: white;
+    line-height: 35px;
+}
+
+.top-container a {
+    text-decoration: none;
+    color: white;
+}
+
+.top-container button {
+    margin-top: 25px;
+    float: right;
+    margin-right: 150px;
+}
+
+.member{
+    float:right;
+}

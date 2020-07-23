@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function(){
+        $('#username_input').change(function(){
+            $('#id_success').hide();
+            $('#button_idCheck').show();
+            $('#username_input').attr("check" , "fail");
+        });
+        
+        $('#button_idCheck').click(function(){
+            var input_id = $('#username_input').val();
+            if(input_id == ''){
+                alert('아이디를 입력해주십시오.');
+                return;
+            }
+        
+        $.ajax({
+            url : "{% url 'Member_App:IC' %}",
+            data : { 'input_id' : input_id },
+            dataType : 'json',
+            success : function(data) {
+                if(data['response'] == "fail"){
+                    alert("already existed");
+                    $('#username_input').focus();
+                    return;
+                } else {
+                    alert("can use");
+                    $('#username_input').attr("check" , "success");
+                    $('#id_success').show();
+                    $('#button_idCheck').hide();
+                    return;		                 
+                }
+            }
+          });
+        });
+        
+        $('#signUp_form').submit(function(){
+            if($('#username_input').attr("check") == "fail"){
+                alert("ID Check Please");
+                $('#username_input').focus();
+                return false;
+            }
+            
+            if($('#password1').val() != $('#password2').val()){
+                alert("Password Wrong");
+                $('#password1').focus();
+                return false;
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/base_css.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>회원가입</h2>
+    <form id="signUp_form" action="{% url 'Member_App:SU' %}" method="POST">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>아이디 및 닉네임</td>
+                <td><input type="text" id="username_input" name="username" check="fail"></td>
+                <td><button type="button" id="button_idCheck">중복 확인하기</button><span id="id_success" style="display:none;">V</span></td>
+            </tr>
+            <tr>
+                <td>이메일</td>
+                <td><input type="text" name="email"></td>
+            </tr>
+            <tr>
+                <td>비밀번호</td>
+                <td><input id="password1" type="password" name="password1"></td>
+            </tr>
+            <tr>
+                <td>비밀번호 재입력</td>
+                <td><input id="password2" type="password" name="password2"></td>
+            </tr>
+        </table>
+        <input type="submit" value="가입하기">
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/base_css.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>회원가입 성공</h2>
+    <a href="{% url 'Member_App:LI' %}">로그인 하기</a>
+</div>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block scripts %}
+<script src="/static/js/readCigaretteDetail_js.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#createChat').click(function(){
+            var a = "{{request.user.is_authenticated}}";
+            if(a=="True"){
+                $('#newComment').toggle();
+            }
+            else{
+                if(confirm("댓글을 작성하려면 로그인을 해야합니다.") == true){
+                    window.location.href="{% url 'Member_App:LI' %}?next={{request.path}}";
+                }
+                else{
+                    return;
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/base_css.css' %}">
+<link rel="stylesheet" href="{% static 'css/readCigaretteDetail_css.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="left-image">
+        <img src="http://placehold.it/300x300" width="300" height="300">
+    </div>
+    <div class="information">
+        <h1>{{selected_item.Name}}</h1>
+        <hr>
+        <br>
+        <table>
+            <tr height="50px">
+                <th>
+                    <h3>타르 : </h3>
+                </th>
+                <td>
+                    <h3>{{selected_item.Tar}} mg</h3>
+                </td>
+            </tr>
+            <tr height="50px">
+                <th>
+                    <h3>니코틴 : </h3>
+                </th>
+                <td>
+                    <h3>{{selected_item.Nicotine}} mg</h3>
+                </td>
+            </tr>
+            <tr height="50px">
+                <th>
+                    <h3>별점 : </h3>
+                </th>
+                <td>
+                    <h3>{{selected_item.StarPoint}} Points</h3>
+                </td>
+            </tr>
+            <tr height="50px">
+                <th>
+                    <h3>가격 : </h3>
+                </th>
+                <td>
+                    <h3>{{selected_item.Price}} 원</h3>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="container">
+    <div class="goodandbad">
+        <span id="Gnum">0</span>
+        <button id="good">좋아요
+        </button>      
+        <button id="bad">별로에요
+        </button>
+        <span id="Bnum">0</span>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="chatInfo">
+        <h1 id="commentNum">{{selected_item.Comments.count}} 개의 댓글</h1>
+        <button id="createChat"type="button">댓글 쓰기</button>
+    </div>
+    <div class="comment" id="newComment">
+        <form action="{% url 'Foreign_Cigarette_App:CNC' item_pk=selected_item.pk %}" method="POST">
+            {% csrf_token %}
+            <p id="star_grade">
+                <span>StarPoint : </span>
+                <a href="#" value="1">★</a>
+                <a href="#" value="2">★</a>
+                <a href="#" value="3">★</a>
+                <a href="#" value="4">★</a>
+                <a href="#" value="5">★</a>
+            </p>
+            <input type="hidden" name="StarPoint" id="starPoint" value="0">
+            <p>{{user.username}}</p>
+            <input type="hidden" name="Nickname" value="{{user.pk}}">
+            <textarea cols="140" rows="3" name="Content" placeholder="내용"></textarea>
+            <button type="submit">등록</button>
+        </form>
+    </div>
+    <div class="comment">
+        <div class="chat_data">
+            {% for item in selected_item.Comments.all %}
+            <div>
+                <p>{{item.Nickname.username}}&nbsp;&nbsp;&nbsp;{{item.StarPoint}} Points</p>
+                <h5>{{item.Content}}</h5>
+                <p class="EditAndDelete" value="{{item.Nickname.username}}">
+                    <a href="">수정</a>
+                    <a href="{% url 'Foreign_Cigarette_App:DC' item_pk=item.pk %}" class="deleteBtn">삭제</a>
+                </p>                
+                <hr>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
